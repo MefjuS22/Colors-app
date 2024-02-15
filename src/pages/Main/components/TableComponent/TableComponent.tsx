@@ -1,21 +1,36 @@
-import { TableCell } from "@mui/material";
-import { StyledTable, StyledTableRow, TableWrapper } from "./TableComponentStyles";
+import {
+  Skeleton,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import {
+  StyledTable,
+  StyledTableRow,
+  TableWrapper,
+} from "./TableComponentStyles";
+import { Product } from "../../../../api/dtos";
 
-export const TableComponent = () => {
-  const tempData = [
-    {
-      id: 1,
-      name: "cerulean",
-      year: "2000",
-      color: "#98B2D1",
-    },
-  ]
+export const TableComponent = ({
+  products,
+  isLoading,
+}: {
+  products?: Product[];
+  isLoading: boolean;
+}) => {
 
   return (
     <TableWrapper>
       <StyledTable>
-        <TableColumns />
-        <TableContents data={tempData} />
+        <TableHead>
+          <TableRow>
+            <TableColumns />
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableContents data={products} isLoading={isLoading} />
+        </TableBody>
       </StyledTable>
     </TableWrapper>
   );
@@ -40,29 +55,44 @@ const TableColumns = () => {
       {column.headerName}
     </TableCell>
   ));
+};
 
-}
-
-type TableContentsProps = {
-  data: Array<{
-    id: number;
-    name: string;
-    year: string;
-    color: string;
-  }>;
-}
-const TableContents = ({data}: TableContentsProps) => {
+const TableContents = ({
+  data,
+  isLoading,
+}: {
+  data?: Product[];
+  isLoading: boolean;
+}) => {
+  if (!data && isLoading) return <TableSkeleton rows={5} />;
+  if (!data) {
+    return (
+      <TableRow>
+        <TableCell align="center">No data</TableCell>
+      </TableRow>
+    );
+  }
   return data.map((row) => (
-      <StyledTableRow key={row.id} color={row.color}>
-        <TableCell key={row.id} align="center">
-          {row.id}
-        </TableCell>
-        <TableCell key={row.name} align="center">
-          {row.name}
-        </TableCell>
-        <TableCell key={row.year} align="center">
-          {row.year}
-        </TableCell>
-      </StyledTableRow>
-    ));
-}
+    <StyledTableRow key={row.id} color={row.color}>
+      <TableCell align="center">{row.id}</TableCell>
+      <TableCell align="center">{row.name}</TableCell>
+      <TableCell align="center">{row.year}</TableCell>
+    </StyledTableRow>
+  ));
+};
+
+const TableSkeleton = ({ rows }: { rows: number }) => {
+  return Array.from({ length: rows }).map((_, index) => (
+    <TableRow key={index}>
+      <TableCell align="center">
+        <Skeleton variant="rectangular" />
+      </TableCell>
+      <TableCell align="center">
+        <Skeleton variant="rectangular" />
+      </TableCell>
+      <TableCell align="center">
+        <Skeleton variant="rectangular" />
+      </TableCell>
+    </TableRow>
+  ));
+};
