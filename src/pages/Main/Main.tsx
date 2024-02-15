@@ -1,7 +1,8 @@
 import { useSearchParams } from "react-router-dom";
-import { InputRow } from "../../components/InputRow/InputRow";
-import { PagesRow } from "../../components/PagesRow/PagesRow";
-import { TableComponent } from "../../components/TableComponent/TableComponent";
+import { InputRow } from "./components/InputRow/InputRow";
+import { PagesRow } from "./components/PagesRow/PagesRow";
+import { TableComponent } from "./components/TableComponent/TableComponent";
+import { MainWrapper } from "./MainStyles";
 
 export const Main = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -9,15 +10,15 @@ export const Main = () => {
   const id = Number(searchParams.get("id"));
 
   return (
-    <>
+    <MainWrapper>
     <button onClick={() => setSearchParams({ page: "2" })}>Set page to 2</button>
     <button onClick={() => setSearchParams({ id: "2" })}>Set id to 2</button>
     <button onClick={() => setSearchParams({})}>reset</button>
     currentPage: {page}
     currentId: {id}
       <InputRow />
-      <PagesRow />
       <TableComponent />
-    </>
+      <PagesRow />
+    </MainWrapper>
   );
 };

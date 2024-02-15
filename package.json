@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/roboto": "^5.0.8",
     "@mui/material": "^5.15.10",
     "@mui/styled-engine-sc": "^6.0.0-alpha.16",
     "install": "^0.13.0",
