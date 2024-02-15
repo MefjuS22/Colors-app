@@ -14,12 +14,12 @@ export const getProducts = async ({
   id,
 }: GetProductsProps): Promise<ProductsResponse> => {
   const url = () => {
+    if (id){
+        return `${BASE_URL}${id}`;
+    }
     if (page){
         return `${BASE_URL}?per_page=${perPage}&page=${page}`;
         
-    }
-    if (id){
-        return `${BASE_URL}/${id}`;
     }
     return `${BASE_URL}?per_page=${perPage}`;
   };

@@ -7,48 +7,56 @@ import { useQuery } from "react-query";
 import { getProducts } from "../../api/queries";
 import { useState } from "react";
 import { ErrorComponent } from "./components/ErrorComponent/ErrorComponent";
+import { queryId, queryPage } from "../../utils/searchParams";
 
 export const Main = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const queryPage = () => {
-    if (!searchParams.has("page")) {
-      return 1;
-    }
-    return Number(searchParams.get("page"));
-  };
-  const [page, setPage] = useState(queryPage());
-  const { data: productsResponse, isLoading, isError, error } = useQuery({
+  const [id, setId] = useState<string>(queryId(searchParams));
+  const [detailsId, setDetailsId] = useState<string>(queryId(searchParams));
+  const [page, setPage] = useState(queryPage(searchParams));
+  const {
+    data: productsResponse,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryFn: () =>
       getProducts({
-        perPage: 5,
         page,
+        id: id ? Number(id) : undefined,
       }),
-    queryKey: ["products", { page }],
+    queryKey: ["products", { page, id }],
     keepPreviousData: true,
   });
-const id = Number(searchParams.get("id"));
-
-const handlePageChange = (page: number) => {
-    setSearchParams({ page: page.toString() });
+  const handlePageChange = (page: number) => {
     setPage(page);
-};
-const errorComponent = isError && <ErrorComponent 
-    errorMsg={(error as Error).message} 
-/>
+    if (page === 1) {
+      setSearchParams({});
+      return;
+    }
+    setSearchParams({ page: page.toString() });
+  };
+  const errorComponent = isError && (
+    <ErrorComponent errorMsg={(error as Error).message} />
+  );
+
+  const handleIdChange = (id: string) => {
+    if (!id) {
+      setSearchParams({});
+      setId("");
+      return;
+    }
+    setSearchParams({ id: id });
+    setId(id);
+  };
 
   return (
     <MainWrapper>
-      <button onClick={() => setSearchParams({ page: "2" })}>
-        Set page to 2
-      </button>
-      <button onClick={() => setSearchParams({ id: "2" })}>Set id to 2</button>
-      <button onClick={() => setSearchParams({})}>reset</button>
-      currentPage: {page}
-      currentId: {id}
       {errorComponent}
-      <InputRow />
+      <InputRow currentId={id} setCurrentId={handleIdChange} />
       <TableComponent products={productsResponse?.data} isLoading={isLoading} />
       <PagesRow
+        isSingular={!Array.isArray(productsResponse?.data)}
         currentPage={productsResponse?.page}
         totalPages={productsResponse?.total_pages}
         isLoading={isLoading}
