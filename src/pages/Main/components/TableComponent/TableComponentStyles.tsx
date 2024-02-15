@@ -1,7 +1,7 @@
 import { Box, Table, TableRow, styled } from "@mui/material";
 
 export const TableWrapper = styled(Box)(() => ({
-  minHeight: "600px",
+  minHeight: "400px",
   width: "100%",
   display: "flex",
   justifyContent: "center",
