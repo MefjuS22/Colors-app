@@ -10,7 +10,7 @@ import {
   StyledTableRow,
   TableWrapper,
 } from "./TableComponentStyles";
-import { Product } from "../../../../api/dtos";
+import { Product } from "../../../../api/apiTypes";
 
 export const TableComponent = ({
   products,
@@ -68,7 +68,9 @@ const TableContents = ({
   if (!data) {
     return (
       <TableRow>
-        <TableCell align="center">No data</TableCell>
+        <TableCell align="center"></TableCell>
+        <TableCell align="center">Server Error</TableCell>
+        <TableCell align="center"></TableCell>
       </TableRow>
     );
   }

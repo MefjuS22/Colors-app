@@ -6,6 +6,7 @@ import { MainWrapper } from "./MainStyles";
 import { useQuery } from "react-query";
 import { getProducts } from "../../api/queries";
 import { useState } from "react";
+import { ErrorComponent } from "./components/ErrorComponent/ErrorComponent";
 
 export const Main = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,7 +17,7 @@ export const Main = () => {
     return Number(searchParams.get("page"));
   };
   const [page, setPage] = useState(queryPage());
-  const { data: productsResponse, isLoading } = useQuery({
+  const { data: productsResponse, isLoading, isError, error } = useQuery({
     queryFn: () =>
       getProducts({
         perPage: 5,
@@ -25,12 +26,15 @@ export const Main = () => {
     queryKey: ["products", { page }],
     keepPreviousData: true,
   });
-  const id = Number(searchParams.get("id"));
+const id = Number(searchParams.get("id"));
 
-  const handlePageChange = (page: number) => {
+const handlePageChange = (page: number) => {
     setSearchParams({ page: page.toString() });
     setPage(page);
-  };
+};
+const errorComponent = isError && <ErrorComponent 
+    errorMsg={(error as Error).message} 
+/>
 
   return (
     <MainWrapper>
@@ -41,6 +45,7 @@ export const Main = () => {
       <button onClick={() => setSearchParams({})}>reset</button>
       currentPage: {page}
       currentId: {id}
+      {errorComponent}
       <InputRow />
       <TableComponent products={productsResponse?.data} isLoading={isLoading} />
       <PagesRow
