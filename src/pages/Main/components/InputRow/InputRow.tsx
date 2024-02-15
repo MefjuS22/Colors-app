@@ -1,4 +1,5 @@
 import { TextField } from "@mui/material";
+import {useState, useEffect} from 'react'
 
 type Props = {
   currentId: string; 
@@ -6,12 +7,25 @@ type Props = {
 }
 
 export const InputRow = ({currentId, setCurrentId}: Props) => {
+  const [debouncedValue, setDebouncedValue] = useState(currentId);
+  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
 
   const handleChange = (value: string) => {
-    //future debouncing logic
-    console.log(value)
-    setCurrentId(value);
+    if (timerId) clearTimeout(timerId);
+    setDebouncedValue(value);
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setCurrentId(debouncedValue);
+    }, 500);
+
+    setTimerId(timer);
+
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
+  }, [debouncedValue]);
 
   return (
     <TextField
@@ -20,7 +34,7 @@ export const InputRow = ({currentId, setCurrentId}: Props) => {
       size="small"
       color="primary"
       type="number"
-      value={currentId}
+      value={debouncedValue}
       onChange={(e) => handleChange(e.target.value)}
       inputProps={{
         min: 1,
