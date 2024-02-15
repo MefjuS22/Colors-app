@@ -6,9 +6,12 @@ import { StyledTableRow } from "../TableComponentStyles";
 export const TableContents = ({
     data,
     isLoading,
+    selectProduct
   }: {
     data?: Product[] | Product;
     isLoading: boolean;
+    selectProduct: (product: Product) => void
+
   }) => {
     if (!data && isLoading) return <TableSkeleton rows={5} />;
     if (!data) {
@@ -23,11 +26,11 @@ export const TableContents = ({
     if (!Array.isArray(data)) {
       data = [data];
     }
-    return data.map((row) => (
-      <StyledTableRow key={row.id} color={row.color}>
-        <TableCell align="center">{row.id}</TableCell>
-        <TableCell align="center">{row.name}</TableCell>
-        <TableCell align="center">{row.year}</TableCell>
+    return data.map((product) => (
+      <StyledTableRow key={product.id} color={product.color} onClick={() => selectProduct(product)}>
+        <TableCell align="center">{product.id}</TableCell>
+        <TableCell align="center">{product.name}</TableCell>
+        <TableCell align="center">{product.year}</TableCell>
       </StyledTableRow>
     ));
   };

@@ -14,9 +14,11 @@ import { TableColumns } from "./components.tsx/TableColumns";
 export const TableComponent = ({
   products,
   isLoading,
+  selectProduct
 }: {
   products?: Product[] | Product;
   isLoading: boolean;
+  selectProduct: (product: Product) => void
 }) => {
 
   return (
@@ -28,7 +30,7 @@ export const TableComponent = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          <TableContents data={products} isLoading={isLoading} />
+          <TableContents data={products} isLoading={isLoading} selectProduct={selectProduct}/>
         </TableBody>
       </StyledTable>
     </TableWrapper>
