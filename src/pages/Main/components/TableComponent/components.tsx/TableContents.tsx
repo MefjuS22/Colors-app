@@ -2,7 +2,7 @@ import { TableCell } from "@mui/material";
 import { TableSkeleton } from "./TableSkeleton";
 import { StyledTableRow } from "../TableComponentStyles";
 import { useProductsData } from "../../../../../hooks/useProductsData";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { ErrorComponent } from "../../ErrorComponent/ErrorComponent";
 import { AxiosError } from "axios";
