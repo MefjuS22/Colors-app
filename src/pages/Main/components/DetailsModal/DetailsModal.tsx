@@ -8,6 +8,7 @@ export const DetailsModal = () => {
 
   const isModalOpen =
     searchParams.get("open") === "true" && searchParams.get("id") !== null;
+
   const handleCloseModal = () => {
     if (searchParams.has('page')){
       setSearchParams((params) => {
@@ -17,12 +18,16 @@ export const DetailsModal = () => {
       });
       return;
     }
+
     setSearchParams((params) => {
       params.delete("open");
       return params;
     });
     
   };
+
+  const modalContent = isModalOpen && <ModalContent />;
+
   return (
     <Dialog
       open={isModalOpen}
@@ -41,7 +46,7 @@ export const DetailsModal = () => {
         },
       }}
     >
-      <ModalContent />
+      {modalContent}
       <Button
         onClick={handleCloseModal}
         variant="outlined"
@@ -56,7 +61,7 @@ export const DetailsModal = () => {
 const ModalContent = () => {
   const [searchParams] = useSearchParams();
 
-  const id = searchParams.get("id")!;
+  const id = searchParams.get("id");
 
   const { product } = useProduct(Number(id));
 
