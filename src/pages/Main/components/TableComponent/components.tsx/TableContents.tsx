@@ -8,18 +8,17 @@ import { ErrorComponent } from "../../ErrorComponent/ErrorComponent";
 import { AxiosError } from "axios";
 
 export const TableContents = () => {
-  const { productsResponse, isLoading, isError, error} = useProductsData();
+  const { productsResponse, isLoading, isError, error } = useProductsData();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    if(productsResponse?.page && !searchParams.has('page')) {
+    if (productsResponse?.page && !searchParams.has("page")) {
       setSearchParams((params) => {
         params.set("page", productsResponse.page.toString());
         return params;
       });
     }
   }, [productsResponse?.page]);
-
 
   if (!productsResponse && isLoading) return <TableSkeleton rows={5} />;
 
@@ -39,23 +38,25 @@ export const TableContents = () => {
       </>
     );
   }
-  const productsTable = productsResponse?.data && productsResponse.data.map((product) => (
-    <StyledTableRow
-      onClick={() => {
-        setSearchParams((params) => {
-          params.set("id", product.id.toString());
-          params.set("open", "true");
-          return params;
-        });
-      }}
-      key={product.id}
-      color={product.color}
-    >
-      <TableCell align="center">{product.id}</TableCell>
-      <TableCell align="center">{product.name}</TableCell>
-      <TableCell align="center">{product.year}</TableCell>
-    </StyledTableRow>
-  ))
+  const productsTable =
+    productsResponse?.data &&
+    productsResponse.data.map((product) => (
+      <StyledTableRow
+        onClick={() => {
+          setSearchParams((params) => {
+            params.set("id", product.id.toString());
+            params.set("open", "true");
+            return params;
+          });
+        }}
+        key={product.id}
+        color={product.color}
+      >
+        <TableCell align="center">{product.id}</TableCell>
+        <TableCell align="center">{product.name}</TableCell>
+        <TableCell align="center">{product.year}</TableCell>
+      </StyledTableRow>
+    ));
 
   return productsTable;
 };

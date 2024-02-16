@@ -19,17 +19,17 @@ export const InputRow = () => {
       clearTimeout(debounceTimeout.current);
     }
     debounceTimeout.current = setTimeout(() => {
-    if (value.trim().length === 0) {
-      setSearchParams((searchParams) => {
-        searchParams.delete("id");
-        return searchParams;
-      });
-      return;
-    }
+      if (value.trim().length === 0) {
+        setSearchParams((searchParams) => {
+          searchParams.delete("id");
+          return searchParams;
+        });
+        return;
+      }
 
-    setSearchParams({
-      id: value,
-    });
+      setSearchParams({
+        id: value,
+      });
     }, 500);
   };
 
@@ -37,7 +37,6 @@ export const InputRow = () => {
     setValue(value);
     handleSearchParamsChange(value);
   };
- 
 
   return (
     <TextField

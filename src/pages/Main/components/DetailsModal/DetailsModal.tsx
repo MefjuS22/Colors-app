@@ -10,7 +10,7 @@ export const DetailsModal = () => {
     searchParams.get("open") === "true" && searchParams.get("id") !== null;
 
   const handleCloseModal = () => {
-    if (searchParams.has('page')){
+    if (searchParams.has("page")) {
       setSearchParams((params) => {
         params.delete("id");
         params.delete("open");
@@ -23,7 +23,6 @@ export const DetailsModal = () => {
       params.delete("open");
       return params;
     });
-    
   };
 
   const modalContent = isModalOpen && <ModalContent />;
@@ -47,11 +46,7 @@ export const DetailsModal = () => {
       }}
     >
       {modalContent}
-      <Button
-        onClick={handleCloseModal}
-        variant="outlined"
-        color="info"
-      >
+      <Button onClick={handleCloseModal} variant="outlined" color="info">
         Close
       </Button>
     </Dialog>

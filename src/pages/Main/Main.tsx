@@ -4,14 +4,13 @@ import { DetailsModal } from "./components/DetailsModal/DetailsModal";
 import { MainWrapper } from "./MainStyles";
 
 export const Main = () => {
-
   return (
-      <>
-          <MainWrapper>
-              <InputRow />
-              <TableComponent />
-          </MainWrapper>
-          <DetailsModal />
-      </>
+    <>
+      <MainWrapper>
+        <InputRow />
+        <TableComponent />
+      </MainWrapper>
+      <DetailsModal />
+    </>
   );
 };

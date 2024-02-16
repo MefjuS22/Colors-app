@@ -1,1 +1,1 @@
-export const BASE_URL = 'https://reqres.in/api/products/'
+export const BASE_URL = "https://reqres.in/api/products/";

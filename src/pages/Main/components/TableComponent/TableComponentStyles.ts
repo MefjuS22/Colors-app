@@ -7,7 +7,7 @@ export const TableWrapper = styled(Box)(() => ({
   justifyContent: "space-between",
   alignItems: "center",
   flexDirection: "column",
-  gap: '50px',
+  gap: "50px",
 }));
 
 export const StyledTable = styled(Table)(() => ({
@@ -16,7 +16,7 @@ export const StyledTable = styled(Table)(() => ({
 
 export const StyledTableRow = styled(TableRow)(
   ({ color }: { color?: string }) => ({
-    backgroundColor: color ? color : 'inherit',
+    backgroundColor: color ? color : "inherit",
     cursor: "pointer",
   })
 );

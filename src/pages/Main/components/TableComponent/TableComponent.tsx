@@ -1,8 +1,5 @@
 import { TableBody, TableHead, TableRow } from "@mui/material";
-import {
-  StyledTable,
-  TableWrapper,
-} from "./TableComponentStyles";
+import { StyledTable, TableWrapper } from "./TableComponentStyles";
 import { TableContents } from "./components.tsx/TableContents";
 import { TableColumns } from "./components.tsx/TableColumns";
 import { useSearchParams } from "react-router-dom";
