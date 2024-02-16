@@ -15,6 +15,7 @@ export const TableContents = () => {
     if (productsResponse?.page && !searchParams.has("page")) {
       setSearchParams((params) => {
         params.set("page", productsResponse.page.toString());
+        window.history.replaceState({}, "", `?${params.toString()}`);
         return params;
       });
     }
