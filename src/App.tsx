@@ -13,7 +13,7 @@ function App() {
         <CssBaseline>
           <Router>
             <Routes>
-              <Route path="" element={<Main />} />
+              <Route path="/" element={<Main />} />
             </Routes>
           </Router>
         </CssBaseline>

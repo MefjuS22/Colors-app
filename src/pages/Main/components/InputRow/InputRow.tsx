@@ -1,31 +1,42 @@
 import { TextField } from "@mui/material";
-import {useState, useEffect} from 'react'
+import { useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
-type Props = {
-  currentId: string; 
-  setCurrentId: (id: string) => void;
-}
+export const InputRow = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const debounceTimeout = useRef<number>();
 
-export const InputRow = ({currentId, setCurrentId}: Props) => {
-  const [debouncedValue, setDebouncedValue] = useState(currentId);
-  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+  const getValue = () => {
+    if (searchParams.get("id") && !searchParams.has("page")) {
+      return searchParams.get("id");
+    }
+    return "";
+  };
+  const [value, setValue] = useState(getValue());
 
-  const handleChange = (value: string) => {
-    if (timerId) clearTimeout(timerId);
-    setDebouncedValue(value);
+  const handleSearchParamsChange = (value: string) => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+    debounceTimeout.current = setTimeout(() => {
+      if (value.trim().length === 0) {
+        setSearchParams((searchParams) => {
+          searchParams.delete("id");
+          return searchParams;
+        });
+        return;
+      }
+
+      setSearchParams({
+        id: value,
+      });
+    }, 500);
   };
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurrentId(debouncedValue);
-    }, 500);
-
-    setTimerId(timer);
-
-    return () => {
-      if (timerId) clearTimeout(timerId);
-    };
-  }, [debouncedValue]);
+  const handleChange = (value: string) => {
+    setValue(value);
+    handleSearchParamsChange(value);
+  };
 
   return (
     <TextField
@@ -34,7 +45,7 @@ export const InputRow = ({currentId, setCurrentId}: Props) => {
       size="small"
       color="primary"
       type="number"
-      value={debouncedValue}
+      value={value}
       onChange={(e) => handleChange(e.target.value)}
       inputProps={{
         min: 1,

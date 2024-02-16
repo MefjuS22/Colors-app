@@ -1,26 +1,21 @@
-import { TableCell } from "@mui/material";
-import { TableSkeleton } from "./TableSkeleton";
-import { StyledTableRow } from "../TableComponentStyles";
-import { useProductsData } from "../../../../../hooks/useProductsData";
 import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useSingleProductData } from "../../../../../hooks/useProductsData";
+import { StyledTableRow } from "../TableComponentStyles";
+import { TableCell } from "@mui/material";
 import { ErrorComponent } from "../../ErrorComponent/ErrorComponent";
 import { AxiosError } from "axios";
+import { TableSkeleton } from "./TableSkeleton";
 
-export const TableContents = () => {
-  const { productsResponse, isLoading, isError, error } = useProductsData();
+export const TableSingleProduct = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    if (productsResponse?.page && !searchParams.has("page")) {
-      setSearchParams((params) => {
-        params.set("page", productsResponse.page.toString());
-        return params;
-      });
-    }
-  }, [productsResponse?.page]);
+  const id = searchParams.get("id")!;
 
-  if (!productsResponse && isLoading) return <TableSkeleton rows={5} />;
+  const { product, isError, error, isLoading } = useSingleProductData(
+    Number(id)
+  );
+
+  if (!product && isLoading) return <TableSkeleton rows={1} />;
 
   if (isError) {
     return (
@@ -38,13 +33,11 @@ export const TableContents = () => {
       </>
     );
   }
-  const productsTable =
-    productsResponse?.data &&
-    productsResponse.data.map((product) => (
+  if (product) {
+    return (
       <StyledTableRow
         onClick={() => {
           setSearchParams((params) => {
-            params.set("id", product.id.toString());
             params.set("open", "true");
             return params;
           });
@@ -56,7 +49,7 @@ export const TableContents = () => {
         <TableCell align="center">{product.name}</TableCell>
         <TableCell align="center">{product.year}</TableCell>
       </StyledTableRow>
-    ));
-
-  return productsTable;
+    );
+  }
+  return null;
 };
