@@ -1,11 +1,8 @@
 import { TextField } from "@mui/material";
-import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export const InputRow = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [debouncedValue, setDebouncedValue] = useState("");
-  // const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
 
   const handleChange = (value: string) => {
     if (value.trim().length === 0) {
@@ -19,7 +16,6 @@ export const InputRow = () => {
     setSearchParams({
       id: value,
     });
-    setDebouncedValue(value);
   };
 
   const getValue = () => {
@@ -28,16 +24,6 @@ export const InputRow = () => {
     }
     return "";
   };
-
-  useEffect(() => {
-    // const timer = setTimeout(() => {
-    //   searchParams.set('id', debouncedValue)
-    // }, 500);
-    // setTimerId(timer);
-    // return () => {
-    //   if (timerId) clearTimeout(timerId);
-    // };
-  }, [debouncedValue]);
 
   return (
     <TextField

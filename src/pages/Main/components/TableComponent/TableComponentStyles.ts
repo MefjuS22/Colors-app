@@ -4,7 +4,7 @@ export const TableWrapper = styled(Box)(() => ({
   minHeight: "400px",
   width: "100%",
   display: "flex",
-  justifyContent: "center",
+  justifyContent: "space-between",
   alignItems: "center",
   flexDirection: "column",
   gap: '50px',
