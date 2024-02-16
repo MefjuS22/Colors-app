@@ -1,10 +1,24 @@
 import { TextField } from "@mui/material";
+import { useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 export const InputRow = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const debounceTimeout = useRef<number>();
 
-  const handleChange = (value: string) => {
+  const getValue = () => {
+    if (searchParams.get("id") && !searchParams.has("page")) {
+      return searchParams.get("id");
+    }
+    return "";
+  };
+  const [value, setValue] = useState(getValue());
+
+  const handleSearchParamsChange = (value: string) => {
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+    debounceTimeout.current = setTimeout(() => {
     if (value.trim().length === 0) {
       setSearchParams((searchParams) => {
         searchParams.delete("id");
@@ -16,14 +30,14 @@ export const InputRow = () => {
     setSearchParams({
       id: value,
     });
+    }, 500);
   };
 
-  const getValue = () => {
-    if (searchParams.get("id") && !searchParams.has("page")) {
-      return searchParams.get("id");
-    }
-    return "";
+  const handleChange = (value: string) => {
+    setValue(value);
+    handleSearchParamsChange(value);
   };
+ 
 
   return (
     <TextField
@@ -32,7 +46,7 @@ export const InputRow = () => {
       size="small"
       color="primary"
       type="number"
-      value={getValue()}
+      value={value}
       onChange={(e) => handleChange(e.target.value)}
       inputProps={{
         min: 1,
