@@ -1,44 +1,58 @@
-import { TextField } from "@mui/material";
-import {useState, useEffect} from 'react'
+import { TextField } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-type Props = {
-  currentId: string; 
-  setCurrentId: (id: string) => void;
-}
+export const InputRow = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [debouncedValue, setDebouncedValue] = useState('');
+    // const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
 
-export const InputRow = ({currentId, setCurrentId}: Props) => {
-  const [debouncedValue, setDebouncedValue] = useState(currentId);
-  const [timerId, setTimerId] = useState<NodeJS.Timeout | null>(null);
+    const handleChange = (value: string) => {
+        if (value.trim().length === 0) {
+            console.log('puste');
 
-  const handleChange = (value: string) => {
-    if (timerId) clearTimeout(timerId);
-    setDebouncedValue(value);
-  };
+            setSearchParams(searchParams => {
+                searchParams.delete('id');
+                return searchParams;
+            });
+            return;
+        }
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurrentId(debouncedValue);
-    }, 500);
-
-    setTimerId(timer);
-
-    return () => {
-      if (timerId) clearTimeout(timerId);
+        setSearchParams({
+            id: value,
+        });
+        setDebouncedValue(value);
     };
-  }, [debouncedValue]);
 
-  return (
-    <TextField
-      label="id"
-      variant="outlined"
-      size="small"
-      color="primary"
-      type="number"
-      value={debouncedValue}
-      onChange={(e) => handleChange(e.target.value)}
-      inputProps={{
-        min: 1,
-      }}
-    />
-  );
+    const getValue = () => {
+        if (searchParams.get('id') && !searchParams.has('page')) {
+            return searchParams.get('id');
+        }
+        return '';
+    };
+
+    useEffect(() => {
+        // const timer = setTimeout(() => {
+        //   searchParams.set('id', debouncedValue)
+        // }, 500);
+        // setTimerId(timer);
+        // return () => {
+        //   if (timerId) clearTimeout(timerId);
+        // };
+    }, [debouncedValue]);
+
+    return (
+        <TextField
+            label="id"
+            variant="outlined"
+            size="small"
+            color="primary"
+            type="number"
+            value={getValue()}
+            onChange={e => handleChange(e.target.value)}
+            inputProps={{
+                min: 1,
+            }}
+        />
+    );
 };

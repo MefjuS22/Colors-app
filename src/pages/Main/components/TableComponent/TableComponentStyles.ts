@@ -5,7 +5,9 @@ export const TableWrapper = styled(Box)(() => ({
   width: "100%",
   display: "flex",
   justifyContent: "center",
-  alignItems: "start",
+  alignItems: "center",
+  flexDirection: "column",
+  gap: '50px',
 }));
 
 export const StyledTable = styled(Table)(() => ({

@@ -1,27 +1,27 @@
-import axios from "axios";
-import { BASE_URL } from "./apiUrl";
-import { ProductsResponse } from "./apiTypes";
+import axios from 'axios';
+import { BASE_URL } from './apiUrl';
+import { Product, ProductsResponse } from './apiTypes';
 
 type GetProductsProps = {
-  perPage?: number;
-  page?: number;
-  id?: number;
+    page: number;
 };
 
+const PER_PAGE = 5;
+
 export const getProducts = async ({
-  perPage = 5,
-  page,
-  id,
+    page,
 }: GetProductsProps): Promise<ProductsResponse> => {
-  const url = () => {
-    if (id){
-        return `${BASE_URL}${id}`;
-    }
-    if (page){
-        return `${BASE_URL}?per_page=${perPage}&page=${page}`;
-        
-    }
-    return `${BASE_URL}?per_page=${perPage}`;
-  };
-  return axios.get(url()).then((res) => res.data);
+    const url = () => {
+        if (page) {
+            return `${BASE_URL}?per_page=${PER_PAGE}&page=${page}`;
+        }
+        return `${BASE_URL}?per_page=${PER_PAGE}`;
+    };
+    return axios.get(url()).then(res => res.data);
+};
+
+export const getProduct = async (id: number) => {
+    const response = await axios.get(`${BASE_URL}${id}`).then(res => res.data);
+
+    return response.data as Product;
 };

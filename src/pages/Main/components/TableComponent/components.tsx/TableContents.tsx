@@ -1,36 +1,46 @@
 import { TableCell, TableRow } from "@mui/material";
-import { Product } from "../../../../../api/apiTypes";
 import { TableSkeleton } from "./TableSkeleton";
 import { StyledTableRow } from "../TableComponentStyles";
+import { useProductsData } from "../../../../../hooks/useProductsData";
+import { useSearchParams } from "react-router-dom";
 
-export const TableContents = ({
-    data,
-    isLoading,
-    selectProduct
-  }: {
-    data?: Product[] | Product;
-    isLoading: boolean;
-    selectProduct: (product: Product) => void
+export const TableContents = () => {
+  const { productsResponse, isLoading } = useProductsData();
+  const setSearchParams = useSearchParams()[1];
 
-  }) => {
-    if (!data && isLoading) return <TableSkeleton rows={5} />;
-    if (!data) {
-      return (
+  if (!productsResponse && isLoading) return <TableSkeleton rows={5} />;
+
+  if (!productsResponse) {
+    return (
+      <>
         <TableRow>
           <TableCell align="center"></TableCell>
           <TableCell align="center">Server Error</TableCell>
           <TableCell align="center"></TableCell>
         </TableRow>
-      );
-    }
-    if (!Array.isArray(data)) {
-      data = [data];
-    }
-    return data.map((product) => (
-      <StyledTableRow key={product.id} color={product.color} onClick={() => selectProduct(product)}>
-        <TableCell align="center">{product.id}</TableCell>
-        <TableCell align="center">{product.name}</TableCell>
-        <TableCell align="center">{product.year}</TableCell>
-      </StyledTableRow>
-    ));
-  };
+      </>
+    );
+  }
+
+  return (
+    <>
+      {productsResponse.data.map((product) => (
+        <StyledTableRow
+          onClick={() => {
+            setSearchParams((params) => {
+              params.set("id", product.id.toString());
+              params.set("open", "true");
+              return params;
+            });
+          }}
+          key={product.id}
+          color={product.color}
+        >
+          <TableCell align="center">{product.id}</TableCell>
+          <TableCell align="center">{product.name}</TableCell>
+          <TableCell align="center">{product.year}</TableCell>
+        </StyledTableRow>
+      ))}
+    </>
+  );
+};
