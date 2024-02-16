@@ -1,21 +1,21 @@
-import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { TableBody, TableHead, TableRow } from "@mui/material";
 import {
   StyledTable,
-  StyledTableRow,
   TableWrapper,
 } from "./TableComponentStyles";
 import { TableContents } from "./components.tsx/TableContents";
 import { TableColumns } from "./components.tsx/TableColumns";
 import { useSearchParams } from "react-router-dom";
-import { useProduct, useProductsData } from "../../../../hooks/useProductsData";
+import { useProductsData } from "../../../../hooks/useProductsData";
 import { PagesRow } from "../PagesRow/PagesRow";
+import { TableSingleProduct } from "./components.tsx/TableSingleProduct";
 
 export const TableComponent = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { productsResponse } = useProductsData();
   const totalPages = productsResponse?.total_pages;
 
-  const paginator = totalPages && searchParams.has('page') && (
+  const paginator = totalPages && searchParams.has("page") && (
     <PagesRow
       currentPage={
         searchParams.get("page") ? Number(searchParams.get("page")) : 1
@@ -30,13 +30,12 @@ export const TableComponent = () => {
     />
   );
 
-  const content = searchParams.has("id") && !searchParams.has('page') ? (
-    <TableSingleProduct />
-  ) : (
-    <>
+  const content =
+    searchParams.has("id") && !searchParams.has("page") ? (
+      <TableSingleProduct />
+    ) : (
       <TableContents />
-    </>
-  );
+    );
 
   return (
     <TableWrapper>
@@ -50,34 +49,5 @@ export const TableComponent = () => {
       </StyledTable>
       {paginator}
     </TableWrapper>
-  );
-};
-
-export const TableSingleProduct = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const id = searchParams.get("id")!;
-
-  const { product } = useProduct(Number(id));
-
-  if (!product) {
-    return null;
-  }
-
-  return (
-    <StyledTableRow
-      onClick={() => {
-        setSearchParams((params) => {
-          params.set("open", "true");
-          return params;
-        });
-      }}
-      key={product.id}
-      color={product.color}
-    >
-      <TableCell align="center">{product.id}</TableCell>
-      <TableCell align="center">{product.name}</TableCell>
-      <TableCell align="center">{product.year}</TableCell>
-    </StyledTableRow>
   );
 };

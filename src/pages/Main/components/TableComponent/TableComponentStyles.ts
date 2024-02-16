@@ -15,8 +15,8 @@ export const StyledTable = styled(Table)(() => ({
 }));
 
 export const StyledTableRow = styled(TableRow)(
-  ({ color }: { color: string }) => ({
-    backgroundColor: color,
+  ({ color }: { color?: string }) => ({
+    backgroundColor: color ? color : 'inherit',
     cursor: "pointer",
   })
 );

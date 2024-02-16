@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogTitle } from "@mui/material";
 import { ModalTile } from "./DetailsModalStyles";
 import { useSearchParams } from "react-router-dom";
-import { useProduct } from "../../../../hooks/useProductsData";
+import { useSingleProductData } from "../../../../hooks/useProductsData";
 
 export const DetailsModal = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -63,7 +63,7 @@ const ModalContent = () => {
 
   const id = searchParams.get("id");
 
-  const { product } = useProduct(Number(id));
+  const { product } = useSingleProductData(Number(id));
 
   if (!product) {
     return null;

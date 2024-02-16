@@ -27,7 +27,7 @@ export const useProductsData = () => {
     };
 };
 
-export const useProduct = (id: number) => {
+export const useSingleProductData = (id: number) => {
     const {
         data: product,
         isLoading,
@@ -36,6 +36,7 @@ export const useProduct = (id: number) => {
     } = useQuery({
         queryFn: () => getProduct(id),
         queryKey: ['product', id],
+        keepPreviousData: true,
     });
     return { product, isLoading, isError, error };
 };
