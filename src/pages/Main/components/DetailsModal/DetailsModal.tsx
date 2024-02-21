@@ -1,7 +1,8 @@
-import { Button, Dialog, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogTitle, Skeleton } from "@mui/material";
 import { ModalTile } from "./DetailsModalStyles";
 import { useSearchParams } from "react-router-dom";
 import { useSingleProductData } from "../../../../hooks/useProductsData";
+import { ErrorComponent } from "../ErrorComponent/ErrorComponent";
 
 export const DetailsModal = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -41,6 +42,7 @@ export const DetailsModal = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "space-between",
           gap: "10px",
         },
       }}
@@ -58,13 +60,9 @@ const ModalContent = () => {
 
   const id = searchParams.get("id");
 
-  const { product } = useSingleProductData(Number(id));
+  const { product, isLoading, isError, error } = useSingleProductData(Number(id));
 
-  if (!product) {
-    return null;
-  }
-
-  return (
+  const details = product && (
     <>
       <DialogTitle>Color details</DialogTitle>
       <ModalTile borderColor={product.color}>Id: {product.id}</ModalTile>
@@ -78,4 +76,25 @@ const ModalContent = () => {
       </ModalTile>
     </>
   );
+
+  if (!product && isLoading) {
+    return (
+      <Skeleton>
+        <DialogTitle>Color details</DialogTitle>
+        <ModalTile>Id: </ModalTile>
+        <ModalTile>Name: </ModalTile>
+        <ModalTile>Year: </ModalTile>
+        <ModalTile>Color HEX:</ModalTile>
+        <ModalTile>Pantonevalue:</ModalTile>
+      </Skeleton>
+    );
+  }
+
+  if (isError && error) {
+    return (
+      <ErrorComponent errorMsg={(error as Error).message} />
+    )
+  }
+
+  return details;
 };

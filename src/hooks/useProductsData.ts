@@ -15,7 +15,6 @@ export const useProductsData = () => {
         page: searchParams.get("page") ? Number(searchParams.get("page")) : 1,
       }),
     queryKey: ["products", { page: searchParams.get("page") }],
-    keepPreviousData: true,
   });
   return {
     productsResponse,
@@ -34,7 +33,6 @@ export const useSingleProductData = (id: number) => {
   } = useQuery({
     queryFn: () => getProduct(id),
     queryKey: ["product", id],
-    keepPreviousData: true,
   });
   return { product, isLoading, isError, error };
 };
