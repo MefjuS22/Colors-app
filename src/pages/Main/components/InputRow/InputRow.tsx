@@ -49,6 +49,7 @@ export const InputRow = () => {
       onChange={(e) => handleChange(e.target.value)}
       inputProps={{
         min: 1,
+        "data-testid": "input-row"
       }}
     />
   );
